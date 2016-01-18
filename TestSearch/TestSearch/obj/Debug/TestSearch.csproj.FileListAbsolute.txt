@@ -1,0 +1,11 @@
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\TestSearch.dll
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\TestSearch.pdb
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\WebDriver.dll
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\WebDriver.Support.dll
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\WebDriver.xml
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\WebDriver.Support.xml
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin\Debug\ru\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\obj\Debug\TestSearch.csprojResolveAssemblyReference.cache
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\obj\Debug\TestSearch.dll
+c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\obj\Debug\TestSearch.pdb

@@ -9,3 +9,14 @@ c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\bin
 c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\obj\Debug\TestSearch.csprojResolveAssemblyReference.cache
 c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\obj\Debug\TestSearch.dll
 c:\users\student\documents\visual studio 2015\Projects\TestSearch\TestSearch\obj\Debug\TestSearch.pdb
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\TestSearch.dll
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\TestSearch.pdb
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\WebDriver.dll
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\WebDriver.Support.dll
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\WebDriver.xml
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\WebDriver.Support.xml
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\bin\Debug\ru\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\obj\Debug\TestSearch.csprojResolveAssemblyReference.cache
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\obj\Debug\TestSearch.dll
+C:\Users\student\Desktop\pavel\TestSearch\TestSearch\obj\Debug\TestSearch.pdb

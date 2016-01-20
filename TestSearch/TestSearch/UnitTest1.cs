@@ -17,19 +17,23 @@ namespace TestSearch
         public void TestSearch()
         {
             Search("амбар");
+            
+           
         }
         [TestMethod]
         public void TestError()
         {
-            Search("проверка");
+           Search("проверка");
         }
         [TestMethod]
         public void TestRegister()
         {
             testRegister("фАкЕл");
+            
         }
         private void Search(string attributeSearch)
         {
+            
             string[] arraySearch = new string[4];
             arraySearch[0] = "факел";
             arraySearch[1] = "амбар";

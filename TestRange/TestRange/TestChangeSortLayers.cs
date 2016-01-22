@@ -13,8 +13,15 @@ namespace TestRange
     [TestClass]
     public class TestChangeSortLayers
     {
-
+        //Тест не выполнен. Отсутствует проверка z-index'ирования.
         private IWebDriver driver;
+        private string baseUrl;
+        [TestInitialize]
+        public void Setup()
+        { 
+            baseUrl = "http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal";
+            driver = new FirefoxDriver();
+        }
         /// <summary>
         ///Данный метод перемещает последний слой на позицию первого.
         ///</summary>
@@ -24,7 +31,13 @@ namespace TestRange
             //Тест №16
             LogOn();
             IncrementLayer();
-            //Выполнил Петров, Балов.
+
+        }
+        [TestCleanup]
+        public void Clean()
+        {
+            System.Threading.Thread.Sleep(2000);
+            driver.Quit();
         }
         private void IncrementLayer()
         {
@@ -34,8 +47,8 @@ namespace TestRange
         }
         private void LogOn()
         {
-            driver = new FirefoxDriver();
-            driver.Navigate().GoToUrl("http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal");
+            
+            driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.Id("txtUser")).SendKeys("guest");
             driver.FindElement(By.Id("txtPsw")).SendKeys("guest");
             driver.FindElement(By.Id("cmdLogin")).Click();

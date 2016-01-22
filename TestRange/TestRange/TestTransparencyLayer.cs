@@ -13,8 +13,15 @@ namespace TestRange
     [TestClass]
     public class TestTransparencyLayer
     {
-
+        //Тест не выполнен. Отсутствует проверка прозрачности слоев на карте.
         private IWebDriver driver;
+        private string baseUrl;
+        [TestInitialize]
+        public void Setup()
+        {
+            baseUrl = "http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal";
+            driver = new FirefoxDriver();
+        }
         /// <summary>
         ///Данный метод приводить прозрачномть элемента к 0.
         ///</summary>
@@ -24,12 +31,18 @@ namespace TestRange
             //Тест №15
             LogOn();
             ClickOnTransparency();
-            //Тест выполнил Петров,Балов
+
+        }
+        [TestCleanup]
+        public void Clean()
+        {
+            System.Threading.Thread.Sleep(2000);
+            driver.Quit();
         }
         private void LogOn()
         {
-            driver = new FirefoxDriver();
-            driver.Navigate().GoToUrl("http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal");
+            
+            driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.Id("txtUser")).SendKeys("guest");
             driver.FindElement(By.Id("txtPsw")).SendKeys("guest");
             driver.FindElement(By.Id("cmdLogin")).Click();

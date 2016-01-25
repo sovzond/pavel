@@ -8,7 +8,6 @@ using OpenQA.Selenium.Firefox;
 
 namespace TestRange
 {
-    
     /// <summary>
     ///Данный класс проводит тест на  правильность нахождения точки по заданным координатам.
     /// </summary>
@@ -24,12 +23,12 @@ namespace TestRange
         {
             //Тест №1
             LogOn();
-            InputCoordinates();
+            InputCoordWnd.get(driver).setLat(60, 50, 0).setLon(69, 59, 0).Click();
+            //InputCoordinates();
             //Тест выполнил Петров,Балов.
         }
         private void InputCoordinates_test()
         {
-
             driver.FindElement(By.Id("sovzond_widget_SimpleButton_100")).Click();
             driver.FindElement(By.Id("dijit_form_NumberTextBox_0")).SendKeys("60");
             driver.FindElement(By.Id("dijit_form_NumberTextBox_1")).SendKeys("50");

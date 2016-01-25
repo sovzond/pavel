@@ -16,3 +16,12 @@ C:\Users\student\Desktop\pavel\TestRange\TestRange\bin\Debug\WebDriver.Support.x
 C:\Users\student\Desktop\pavel\TestRange\TestRange\obj\Debug\TestRange.csprojResolveAssemblyReference.cache
 C:\Users\student\Desktop\pavel\TestRange\TestRange\obj\Debug\TestRange.dll
 C:\Users\student\Desktop\pavel\TestRange\TestRange\obj\Debug\TestRange.pdb
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\bin\Debug\TestRange.dll
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\bin\Debug\TestRange.pdb
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\bin\Debug\WebDriver.dll
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\bin\Debug\WebDriver.Support.dll
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\bin\Debug\WebDriver.xml
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\bin\Debug\WebDriver.Support.xml
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\obj\Debug\TestRange.csprojResolveAssemblyReference.cache
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\obj\Debug\TestRange.dll
+C:\Users\maxim-v\Source\Repos\Pavel\pavel\TestRange\TestRange\obj\Debug\TestRange.pdb

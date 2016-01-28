@@ -24,7 +24,7 @@ namespace TestRange
             //Тест №15
             LogOn();
             ClickOnTransparency();
-            //Тест выполнил Петров,Балов
+
         }
         private void LogOn()
         {

@@ -9,7 +9,7 @@ using OpenQA.Selenium.Interactions;
 namespace TestRange
 {
     /// <summary>
-    ///  
+    ///Выполняет проверку на отображение слоев гугл, а так же на автоматическое включение  слоя OpenStreetMap  
     /// </summary>
     [TestClass]
     public class TestBaseLayers
@@ -36,7 +36,7 @@ namespace TestRange
         }
 
         /// <summary>
-        ///
+        ///Выполняет проверку на отображение слоев гугл, а так же на автоматическое включение  слоя OpenStreetMap
         ///</summary>
         [TestMethod]
         public void CheckBaseLayers()

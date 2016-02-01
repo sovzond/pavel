@@ -13,102 +13,99 @@ namespace TestRange
     /// </summary>
     [TestClass]
     public class TestBaseLayers
-  
     {
-
         private IWebDriver driver;
         private const string baseUrl = "http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal";
         private const string loginUrl = "http://91.143.44.249/sovzond_test/portal/";
-        
+        private const string urlImageScheme = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e1&3u11&4m2&1u1426&2u595&5m5&1e0&5sru-RU&6sus&10b1&12b1&token=21311";
+        private const string urlImageSputnik = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e2&3u11&4m2&1u1426&2u595&5m5&1e2&5sru-RU&6sus&10b1&12b1&token=32241";
+        private const string urlImageGibrid = "http://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i363301&2i149508&2e2&3u11&4m2&1u1426&2u595&5m5&1e3&5sru-RU&6sus&10b1&12b1&token=98410";
+        private const string locationSlideMenu = "#menuSlide div.svzSimpleButton.slidePanelButton";
+        private const string locationBaseLayers = "#layersCon div.svzSimpleButton.accordionButton";
+        private const string locationBaseLayersChildContainer = "layerManagerBasemap";
+        private const string locationRadioButtonOSM = "#layerManagerBasemap div.dijit.dijitReset.dijitInline.dijitRadio.dijitRadioChecked.dijitChecked input";
+        private const string locationGoogle = "#stdportal_LayerManagerBase_0 div.svzLayerManagerText";
+        private const string locationLayerSputnik = "dijit_form_RadioButton_1";
+        private const string locationLayerScheme = "#stdportal_LayerManagerBase_0 input.dijitReset.dijitCheckBoxInput";
+        private const string locationLayerGibrid = "dijit_form_RadioButton_2";
+
         [TestInitialize]
         public void Setup()
         {
             driver = new FirefoxDriver();
-
         }
+
         /// <summary>
         ///
         ///</summary>
         [TestMethod]
         public void CheckBaseLayers()
-         {
-            
+        {
             LogOn();
-            CheckGoogleLayers();
- 
+            OpenBaseLayers();
+            CheckSelectedOSM();
+            OpenGoogle();
+            CheckLayerScheme();
+            CheckLayerSputnik();
+            CheckLayerGibrid();
         }
         [TestCleanup]
         public void Clean()
         {
             System.Threading.Thread.Sleep(2000);
             driver.Quit();
-
         }
         private void LogOn()
         {
-           
             driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.Id("txtUser")).SendKeys("guest");
             driver.FindElement(By.Id("txtPsw")).SendKeys("guest");
             driver.FindElement(By.Id("cmdLogin")).Click();
             Assert.AreEqual(loginUrl, driver.Url, "Не удалось пройти авторизацию");
-        }       
-        private void CheckGoogleLayers()
+        }
+        private void OpenBaseLayers()
+        { 
+            driver.FindElement(By.CssSelector(locationSlideMenu)).Click();    
+            IWebElement elementBaseLayer = driver.FindElement(By.CssSelector(locationBaseLayers));
+            var builderBaseLayers = new Actions(driver);
+            System.Threading.Thread.Sleep(1000);
+            builderBaseLayers.Click(elementBaseLayer).Perform(); 
+            System.Threading.Thread.Sleep(1000);
+        }
+        private void CheckSelectedOSM()
+        {     
+            IWebElement elementRadioButtonTrue = driver.FindElement(By.Id(locationBaseLayersChildContainer)).
+              FindElement(By.XPath("//input[@aria-checked='true']")); 
+            IWebElement elementOSM = driver.FindElement(By.CssSelector(locationRadioButtonOSM)); 
+            Assert.AreEqual(elementOSM.Location.X, elementRadioButtonTrue.Location.X, "Базовый слой OpenStreetMap отключен");
+            Assert.AreEqual(elementOSM.Location.Y, elementRadioButtonTrue.Location.Y, "Базовый слой OpenStreetMap отключен"); 
+        }
+        private void OpenGoogle()
         {
-
-              driver.FindElement(By.Id("menuSlide")) 
-                   .FindElement(By.CssSelector("div.svzSimpleButton.slidePanelButton")).Click(); // открыть плажку       
-               IWebElement elementBaseLayer = driver.FindElement(By.Id("layersCon"))
-                   .FindElement(By.CssSelector("div.svzSimpleButton.accordionButton"));
-               var builderBaseLayers = new Actions(driver);
-               System.Threading.Thread.Sleep(1000);
-               builderBaseLayers.Click(elementBaseLayer).Perform(); // открыть базовые слои
+            driver.FindElement(By.CssSelector(locationGoogle)).Click(); 
             System.Threading.Thread.Sleep(1000);
-            IWebElement elementOSM = driver.FindElement(By.XPath("//input[@aria-checked='true']"));
-            int osmX = 3;
-            int osmY = 232;
-            Assert.AreEqual(osmX, elementOSM.Location.X, "Базовый слой OpenStreetMap отключен");
-            Assert.AreEqual(osmY, elementOSM.Location.Y, "Базовый слой OpenStreetMap отключен");
-            driver.FindElement(By.Id("stdportal_LayerManagerBase_0"))
-                .FindElement(By.CssSelector("div.svzLayerManagerText")).Click(); // открыть гугл
+        }
+        private void CheckLayerScheme()
+        {
+            driver.FindElement(By.Id(locationLayerSputnik)).Click();
+            driver.FindElement(By.CssSelector(locationLayerScheme)).Click(); 
             System.Threading.Thread.Sleep(1000);
-            driver.FindElement(By.Id("dijit_form_RadioButton_1")).Click(); // открыть спутник
-            driver.FindElement(By.Id("stdportal_LayerManagerBase_0"))
-                .FindElement(By.CssSelector("input.dijitReset.dijitCheckBoxInput")).Click(); // открыть схема
-
-         /*   IWebElement elementLayerScheme = driver.FindElement(By.Id("stdportal_LayerManagerBase_0"))
-                .FindElement(By.CssSelector("input.dijitReset.dijitCheckBoxInput"));
-            var builderLayerScheme = new Actions(driver);
+            IList<IWebElement> elementScheme = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
+            Assert.AreEqual(urlImageScheme, elementScheme[0].GetAttribute("src"), "Слой схема отобразил не корректный слой.");
+        }
+        private void CheckLayerSputnik()
+        {
+            driver.FindElement(By.Id(locationLayerSputnik)).Click();
             System.Threading.Thread.Sleep(1000);
-            builderLayerScheme.Click(elementLayerScheme).Perform();
-            */
-
-            IJavaScriptExecutor js = driver as IJavaScriptExecutor;
-            string idScheme = (string)js.ExecuteScript("return window.portal.stdmap.map.baseLayer.div.id.toString()");
-            IWebElement e1 = driver.FindElement(By.Id(idScheme));
-            IList <IWebElement> elementScheme = driver
-                //.FindElements(By.CssSelector("#" + idScheme + " img"));
-                .FindElements(By.CssSelector("div.gm-style img[src*='google']"));
-           
-            List <string> names = new List<string>();
-            foreach (IWebElement el in elementScheme)
-            {
-                string src = el.GetAttribute("src");
-                names.Add(src);
-
-            }
-            /*  System.Threading.Thread.Sleep(2000);
-              driver.FindElement(By.Id("dijit_form_RadioButton_1")).Click();  // открыть спутник
-              System.Threading.Thread.Sleep(2000);
-              driver.FindElement(By.Id("dijit_form_RadioButton_2")).Click(); // открыть клик
-              */
-            //dojo.query("div.gm-style img[src*=google]")[1]); - возвращает тег img гугловской картинки
-            //window.portal.stdmap.map.baseLayer.div.id
-            //Возвращаят id контейнера в котором следует искать картинку для сравнения.
-            //найти необходимую картинку для сравнения
-
-            //Логика: выбрать слой, найти картинку этого слоя. Сравни, появилась ли эта картинка после отображения слоя.
-
+            IList<IWebElement> elementSputnik = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
+            Assert.AreEqual(urlImageSputnik, elementSputnik[0].GetAttribute("src"), "Слой спутник отобразил не корректный слой");
+        }
+        private void CheckLayerGibrid()
+        {
+            driver.FindElement(By.Id(locationLayerGibrid)).Click();
+            System.Threading.Thread.Sleep(1000);
+            IList<IWebElement> elementGibrid = driver.FindElements(By.CssSelector("div.gm-style img[src*='google']"));
+            Assert.AreEqual(urlImageGibrid, elementGibrid[0].GetAttribute("src"), "Слой гибрид отобразил не корректный слой");
         }
 
     }

@@ -65,7 +65,7 @@
     <Compile Include="TestChangeSortLayers.cs" />
     <Compile Include="TestErrorMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TestLink.cs" />
+    <Compile Include="TestCurrentExtent.cs" />
     <Compile Include="TestTransparencyLayer.cs" />
   </ItemGroup>
   <ItemGroup>

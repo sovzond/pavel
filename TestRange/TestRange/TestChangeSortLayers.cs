@@ -5,41 +5,99 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Firefox;
+using System.Threading;
 namespace TestRange
 {
     /// <summary>
-    /// Данный тест осуществляет проверку на изменение порядка отображения слоев.
+    /// Осуществляет проверку на изменение порядка отображения слоев.
     /// </summary>
     [TestClass]
     public class TestChangeSortLayers
     {
-
         private IWebDriver driver;
+        private IJavaScriptExecutor js;
+        private string zIndexDNS;
+        private string zIndexFakel;
+        private string zIndexAmbar;
+        private string zIndexPlaces;
+        private const string baseUrl = "http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal";
+        private const string loginUrl = "http://91.143.44.249/sovzond_test/portal/";
+        private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
+        private const string locationIncDNS = "#dojoUnique4 img";
+        private const string locationIncFakel = "#dojoUnique1 img";
+        private const string locationIncAmbar = "#dojoUnique2 img";
+        private const string locationIncPlaces = "#dojoUnique3 img";
+
+        [TestInitialize]
+        public void Setup()
+        {
+            driver = new FirefoxDriver();
+            js = driver as IJavaScriptExecutor;
+            zIndexDNS = "";
+            zIndexFakel = "";
+            zIndexAmbar = "";
+            zIndexPlaces = "";
+        }
+
         /// <summary>
-        ///Данный метод перемещает последний слой на позицию первого.
+        ///Перемещает каждый последний слой на позицию первого.
         ///</summary>
         [TestMethod]
-        public void CheckIndexLayer()
+        public void IncrementLayers()
         {
-            //Тест №16
             LogOn();
-            IncrementLayer();
-            //Выполнил Петров, Балов.
+            IncrementLayerDNS();
+            IncrementLayerPlaces();
+            IncrementLayerAmbar();
+            IncrementLayerFakel();
         }
-        private void IncrementLayer()
+        [TestCleanup]
+        public void Clean()
         {
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_74")).Click();
-            for (int i = 0; i < 3; i++)
-                driver.FindElement(By.Id("dojoUnique4")).FindElement(By.CssSelector("img")).Click();
+            Thread.Sleep(2000);
+            driver.Quit();
         }
         private void LogOn()
         {
-            driver = new FirefoxDriver();
-            driver.Navigate().GoToUrl("http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal");
+            driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.Id("txtUser")).SendKeys("guest");
             driver.FindElement(By.Id("txtPsw")).SendKeys("guest");
             driver.FindElement(By.Id("cmdLogin")).Click();
+            Assert.AreEqual(loginUrl, driver.Url, "Не удалось пройти авторизацию");
         }
-
+        private void IncrementLayerDNS()
+        {
+            driver.FindElement(By.CssSelector(locationLegenda)).Click();
+            zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
+            for (int i = 0; i < 3; i++)
+                driver.FindElement(By.CssSelector(locationIncDNS)).Click();
+            zIndexDNS = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_ДНС\")[0].div.style.zIndex;");
+            Assert.AreEqual(zIndexFakel, zIndexDNS, "Слой не отобразился выше предыдущего");
+            Thread.Sleep(1000);
+        }
+        private void IncrementLayerPlaces()
+        {
+            for (int i = 0; i < 3; i++)
+                driver.FindElement(By.CssSelector(locationIncPlaces)).Click();
+            zIndexPlaces = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Кустовые площадки\")[0].div.style.zIndex;");
+            Assert.AreEqual(zIndexDNS, zIndexPlaces, "Слой не отобразился выше предыдущего");
+            Thread.Sleep(1000);
+        }
+        private void IncrementLayerAmbar()
+        {
+            for (int i = 0; i < 3; i++)
+                driver.FindElement(By.CssSelector(locationIncAmbar)).Click();
+            zIndexAmbar = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Амбары\")[0].div.style.zIndex;");
+            Assert.AreEqual(zIndexPlaces, zIndexAmbar, "Слой не отобразился выше предыдущего");
+            Thread.Sleep(1000);
+        }
+        private void IncrementLayerFakel()
+        {
+            for (int i = 0; i < 3; i++)
+                driver.FindElement(By.CssSelector(locationIncFakel)).Click();
+            zIndexFakel = (string)js.ExecuteScript("return window.portal.stdmap.map.getLayersByName(\"wms_Факелы\")[0].div.style.zIndex;");
+            Assert.AreEqual(zIndexPlaces, zIndexFakel, "Слой не отобразился выше предыдущего");
+            Thread.Sleep(1000);
+        }
     }
 }

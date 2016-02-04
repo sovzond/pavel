@@ -15,7 +15,6 @@ namespace TestRange
     [TestClass]
     public class TestErrorMessage
     {
-        //Тесты выполнены.
         private IWebDriver driver;     
         private const string charError = "Указано недопустимое значение.";
         private const string intError = "Это значение вне диапазона.";
@@ -25,9 +24,7 @@ namespace TestRange
         [TestInitialize]
         public void Setup()
         {
-            
             driver = new FirefoxDriver();
-
         }
 
         /// <summary>
@@ -38,7 +35,6 @@ namespace TestRange
         {
             LogOn();
             InputInt();
-            //Тест №2
         }
 
         /// <summary>
@@ -49,8 +45,6 @@ namespace TestRange
         {
             LogOn();
             InputChar();
-            //Тест №3
-
         }
 
         [TestCleanup]
@@ -62,13 +56,11 @@ namespace TestRange
 
         private void LogOn()
         {
-
             driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.Id("txtUser")).SendKeys("guest");
             driver.FindElement(By.Id("txtPsw")).SendKeys("guest");
             driver.FindElement(By.Id("cmdLogin")).Click();
             Assert.AreEqual(loginUrl, driver.Url, "Не удалось пройти авторизацию");
-
         }
         private void InputChar()
         {

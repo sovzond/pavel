@@ -5,50 +5,136 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Firefox;
+using System.Drawing;
+using System.IO;
+using System.Drawing.Imaging;
+
 namespace TestRange
 {
     /// <summary>
-    /// Данный класс осуществляет тест на прозрачноть элементов слоя.
+    /// 
     /// </summary>
     [TestClass]
     public class TestTransparencyLayer
     {
 
         private IWebDriver driver;
+        private const string baseUrl = "http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal";
+        private const string loginUrl = "http://91.143.44.249/sovzond_test/portal/";
+        private const string locationLegenda = "#menuSlide div.svzSimpleButton.slidePanelLegendButton";
+        private const string locationFakelDecTransButton = "#dojoUnique1 div.dijitSliderDecrementIconH";
+        private const string locationAmbarDecTransButton = "#dojoUnique2 div.dijitSliderDecrementIconH";
+        private const string locationPlacesDecTransButton = "#dojoUnique3 div.dijitSliderDecrementIconH";
+        private const string locationDNSDecTransButton = "#dojoUnique4 div.dijitSliderDecrementIconH";
+        private const string locationMap = "#OpenLayers_Layer_OSM_2 img[src*='/11/1422/584.png']";
+
+        [TestInitialize]
+        public void Setup()
+        {
+            driver = new FirefoxDriver();
+        }
+
         /// <summary>
-        ///Данный метод приводить прозрачномть элемента к 0.
+        ///
         ///</summary>
         [TestMethod]
         public void TestTransparency()
         {
-            //Тест №15
             LogOn();
-            ClickOnTransparency();
-
+            DecTransparencyFakel();
         }
+
+        [TestCleanup]
+        public void Clean()
+        {
+            System.Threading.Thread.Sleep(2000);
+            driver.Quit();
+        }
+
         private void LogOn()
         {
-            driver = new FirefoxDriver();
-            driver.Navigate().GoToUrl("http://91.143.44.249/sovzond_test/portal/login.aspx?ReturnUrl=%2fsovzond_test%2fportal");
+            driver.Navigate().GoToUrl(baseUrl);
             driver.FindElement(By.Id("txtUser")).SendKeys("guest");
             driver.FindElement(By.Id("txtPsw")).SendKeys("guest");
             driver.FindElement(By.Id("cmdLogin")).Click();
+            Assert.AreEqual(loginUrl, driver.Url, "Не удалось пройти авторищацию");
         }
-        private void ClickOnTransparency()
-        {
-            driver.FindElement(By.Id("sovzond_widget_SimpleButton_74")).Click();           
+
+        private void DecTransparencyFakel()
+        {         
+            Bitmap imageFakelVisible = TakeScreenshot(); 
+            driver.FindElement(By.CssSelector(locationLegenda)).Click();
             for (int i = 0; i < 55; i++)
-            {
-                driver.FindElement(By.ClassName("dijitSliderDecrementIconH")).Click();
-                driver.FindElement(By.Id("dojoUnique2")).FindElement(By.ClassName("dijitSliderDecrementIconH")).Click();
-                driver.FindElement(By.Id("dojoUnique3")).FindElement(By.ClassName("dijitSliderDecrementIconH")).Click();
-                driver.FindElement(By.Id("dojoUnique4")).FindElement(By.ClassName("dijitSliderDecrementIconH")).Click();
-            }
-        
-            
-            
+                driver.FindElement(By.CssSelector(locationFakelDecTransButton)).Click();
+            Bitmap imageFakelNotVisible = TakeScreenshot();
 
         }
-
+        private Bitmap TakeScreenshot()
+        {
+            var screenshotDriver = driver as ITakesScreenshot;
+            Screenshot screenshot = screenshotDriver.GetScreenshot();
+            var bitmapScreen = new Bitmap(new MemoryStream(screenshot.AsByteArray));
+            IWebElement element = driver.FindElement(By.CssSelector(locationMap));
+            var cutArea = new Rectangle(element.Location, element.Size);
+            return bitmapScreen.Clone(cutArea, bitmapScreen.PixelFormat);
+        }
+        private unsafe Bitmap EqualImage(Bitmap image1,Bitmap image2,Color color)
+        {
+            if (image1 == null || image2 == null)
+                return null;
+            if (image1.Width != image2.Width || image1.Height != image2.Height)
+                return null;
+            Bitmap diffImage = image2.Clone() as Bitmap;
+            int height = image1.Height;
+            int width = image1.Width;
+            BitmapData data1 = image1.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            BitmapData data2 = image2.LockBits(new Rectangle(0, 0, width, height),
+                ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+            BitmapData diffData = diffImage.LockBits(new Rectangle(0, 0, width, height),
+         ImageLockMode.WriteOnly, PixelFormat.Format24bppRgb);
+            byte* data1Ptr = (byte*)data1.Scan0;
+            byte* data2Ptr = (byte*)data2.Scan0;
+            byte* diffPtr = (byte*)diffData.Scan0;
+            byte[] swapColor = new byte[3];
+            swapColor[0] = color.R;
+            swapColor[1] = color.G;
+            swapColor[2] = color.B;
+            int rowPadding = data1.Stride - (image1.Width * 3);
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    int same = 0;
+                    byte[] tmp = new byte[3];
+                    for (int x = 0; x < 3; x++)
+                    {
+                        tmp[x] = data2Ptr[0];
+                        if (data1Ptr[0] == data2Ptr[0])
+                        {
+                            same++;
+                        }
+                        data1Ptr++;
+                        data2Ptr++;
+                        for (int y = 0; y < 3; y++)
+                        {
+                            diffPtr[0] = (same == 3) ? swapColor[x] : tmp[x];
+                            diffPtr++;
+                            if (rowPadding > 0)
+                            {
+                                data1Ptr += rowPadding;
+                                data2Ptr += rowPadding;
+                                diffPtr += rowPadding;
+                            }
+                        }
+                        image1.UnlockBits(data1);
+                        image2.UnlockBits(data2);
+                        diffImage.UnlockBits(diffData);
+                       
+                    }
+                }
+            }
+             return diffImage;
+        }
     }
 }
